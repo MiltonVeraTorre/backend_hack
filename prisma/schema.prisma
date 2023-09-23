@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model admin{
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String
+  spaces    space[]
+}
+
+model space{
+  id        Int      @id @default(autoincrement())
+  name      String
+  adminId   Int
+  admin     admin    @relation(fields: [adminId], references: [id])
+  quota     Int
+  open_date DateTime
+  close_date DateTime
+  status    Boolean
+  reservables reservable[]
+  
+}
+
+model user{
+  id        Int      @id @default(autoincrement())
+  matricula String
+  name      String
+  email     String   @unique
+  password  String
+  reservations  reservation[]
+}
+
+model reservable{
+  id        Int      @id @default(autoincrement())
+  spaceId Int
+  space     space @relation(fields: [spaceId],references: [id])
+  init_date DateTime  
+  end_date DateTime
+  quota    Int
+  reservations reservation[]
+}
+
+model reservation{
+  id  Int  @id @default(autoincrement())
+  reservableId  Int
+  reservable    reservable @relation(fields: [reservableId],references: [id])
+  userId        Int
+  user          user @relation(fields: [userId],references: [id])
+  reservation_date  DateTime
+  status        String
+  reason      String
+}
+
+
+
