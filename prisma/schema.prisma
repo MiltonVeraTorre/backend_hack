@@ -10,57 +10,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model admin{
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      String
-  spaces    space[]
+model estrategia {
+  id          Int           @id @default(autoincrement())
+  nombre      String
+  monto_inicial Int
+  monto_mensual Int
+  tiempo_retorno Int
+  rendimiento_anual Decimal
+  riesgo          String
+  aceptado    Boolean     @default(false)
+  ponderacion ponderacion[]
+  grafica     grafica[]
 }
 
-model space{
-  id        Int      @id @default(autoincrement())
-  name      String
-  adminId   Int
-  admin     admin    @relation(fields: [adminId], references: [id])
-  quota     Int
-  open_date DateTime
-  close_date DateTime
-  status    Boolean
-  reservables reservable[]
+
+model grafica{
+  id          Int           @id @default(autoincrement())
+  label       Float
+  value       Float
+  estrategiaId  Int
+  estrategia   estrategia @relation(fields: [estrategiaId], references: [id])
+}
+
+model ponderacion {
+  id           Int        @id @default(autoincrement())
+  fondoId      Int
+  fondo        fondo      @relation(fields: [fondoId], references: [id])
+  estrategiaId Int
+  estrategia   estrategia @relation(fields: [estrategiaId], references: [id])
+  ponderacion  Int
   
 }
 
-model user{
-  id        Int      @id @default(autoincrement())
-  matricula String
-  name      String
-  email     String   @unique
-  password  String
-  reservations  reservation[]
+model fondo {
+  id             Int           @id @default(autoincrement())
+  nombre        String
+  tipo_fondo     String
+  riesgo         String
+  riesgo_n      Int @default(0)
+  estrategia     String
+  disponibilidad Int
+  plazo_minimo   Int
+  monto_minimo   Decimal    @default(0)
+  tipo_inversion String
+  rendimiento    rendimiento[]
+  ponderacion    ponderacion[]
 }
 
-model reservable{
-  id        Int      @id @default(autoincrement())
-  spaceId Int
-  space     space @relation(fields: [spaceId],references: [id])
-  init_date DateTime  
-  end_date DateTime
-  quota    Int
-  reservations reservation[]
+model rendimiento {
+  id              Int     @id @default(autoincrement())
+  limite_inferior Int?
+  limite_superior Int?
+  comision        Decimal
+  rendimiento     Decimal
+  fondoId         Int
+  fondo           fondo   @relation(fields: [fondoId], references: [id])
 }
-
-model reservation{
-  id  Int  @id @default(autoincrement())
-  reservableId  Int
-  reservable    reservable @relation(fields: [reservableId],references: [id])
-  userId        Int
-  user          user @relation(fields: [userId],references: [id])
-  reservation_date  DateTime
-  status        String
-  reason      String
-}
-
-
-

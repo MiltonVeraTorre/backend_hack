@@ -3,7 +3,8 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
-import adminRoutes from "./routes/adminRoutes";
+import fondoRoutes from "./routes/fondoRoutes.js";
+import estrategiaRoutes from "./routes/estrategiaRoutes.js";
 const app = express();
 export const prisma = new PrismaClient();
 const whitelist = [process.env.ADMIN_URL, process.env.USER_URL];
@@ -30,7 +31,8 @@ else {
 }
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use("/api/admin", adminRoutes);
+app.use("/api/fondo", fondoRoutes);
+app.use("/api/estrategia", estrategiaRoutes);
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Servidor Corriendo en ${PORT}`);

@@ -7,7 +7,9 @@ import morgan from "morgan";
 
 import { PrismaClient } from "@prisma/client";
 
-import adminRoutes from "./routes/adminRoutes";
+
+import fondoRoutes from "./routes/fondoRoutes.js";
+import estrategiaRoutes from "./routes/estrategiaRoutes.js";
 
 const app = express();
 
@@ -48,7 +50,8 @@ app.use(express.json());
 // Routing
 
 // app.use("ruta",archivoDeRuta)
-app.use("/api/admin",adminRoutes)
+app.use("/api/fondo",fondoRoutes)
+app.use("/api/estrategia",estrategiaRoutes)
 
 const PORT = process.env.PORT || 4000;
 
