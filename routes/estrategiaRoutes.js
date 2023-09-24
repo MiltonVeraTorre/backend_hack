@@ -1,5 +1,5 @@
 import express from "express";
-import {crearEstrategia, obtenerEstrategias} from "../controllers/EstrategiaController.js"
+import {crearEstrategia, elegirEstrategia, obtenerEstrategias} from "../controllers/EstrategiaController.js"
 
 const router = express.Router();
 
@@ -13,6 +13,8 @@ const router = express.Router();
 router.post("/",crearEstrategia)
 // Obtener todas las estrategias
 router.get("/",obtenerEstrategias)
+// Aprobar una estrategia
+router.get("/elegir/:id",elegirEstrategia)
 // Obtener una estrategia
 router.get("/:id")
 // Eliminar una estrategia
